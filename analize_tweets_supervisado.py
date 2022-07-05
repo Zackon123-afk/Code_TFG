@@ -69,7 +69,7 @@ listOfDates = dateToWeekday(df['date'])
 listOfTimes = hourToSec(df['time'])
 listOfFollowers, listOfFollowing = tweeterInformation(listOfUsernames)
 
-with open('nombre de funciones - no supervisado.txt','r') as file:
+with open('nombre de funciones.txt','r') as file:
     header = file.read()
     header = header.split(',')
 

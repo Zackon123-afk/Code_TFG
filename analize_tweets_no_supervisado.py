@@ -58,7 +58,7 @@ def hourToSec(hoursToChange):
 
 print("--- Preparation of data ---\n")
 
-df = pd.read_excel("C:\\Users\\arnau\\Dropbox\\TFG\\Code\\corpus.xlsx")
+df = pd.read_excel("C:\\Users\\arnau\\Dropbox\\TFG\\Code_TFG\\corpus_no_etiquetado.xlsx")
 
 listOfUsernames = df['username']
 
@@ -75,7 +75,7 @@ with open('nombre de funciones - no supervisado.txt','r') as file:
 
 print("--- Writing in csv ---\n")
 
-with open('atributes.csv','w',newline='') as file:
+with open('atributes_no_etiquetado.csv','w',newline='') as file:
     writer = csv.writer(file,delimiter=',')
     writer.writerow(header)
     for tweet,like,retweet,dates,time,follower,following in zip(listOfTweets,listOfLikes,listOfRetweets,listOfDates,listOfTimes,listOfFollowers,listOfFollowing):

@@ -58,7 +58,7 @@ def hourToSec(hoursToChange):
 
 print("--- Preparation of data ---\n")
 
-df = pd.read_excel("C:\\Users\\arnau\\Dropbox\\TFG\\Code\\corpus.xlsx")
+df = pd.read_excel("C:\\Users\\arnau\\Dropbox\\TFG\\Code_TFG\\corpus_etiquetado.xlsx")
 
 listOfUsernames = df['username']
 
@@ -68,17 +68,19 @@ listOfLikes = df['likes_count']
 listOfDates = dateToWeekday(df['date'])
 listOfTimes = hourToSec(df['time'])
 listOfFollowers, listOfFollowing = tweeterInformation(listOfUsernames)
+listOfTopics = df['tema']
+listOfResults = df['etiquetado']
 
-with open('nombre de funciones.txt','r') as file:
+with open('nombre de funciones - supervisado.txt','r') as file:
     header = file.read()
     header = header.split(',')
 
 print("--- Writing in csv ---\n")
 
-with open('atributes.csv','w',newline='') as file:
+with open('atributes_etiquetado.csv','w',newline='') as file:
     writer = csv.writer(file,delimiter=',')
     writer.writerow(header)
-    for tweet,like,retweet,dates,time,follower,following in zip(listOfTweets,listOfLikes,listOfRetweets,listOfDates,listOfTimes,listOfFollowers,listOfFollowing):
+    for tweet,like,retweet,dates,time,follower,following,topic,resulted in zip(listOfTweets,listOfLikes,listOfRetweets,listOfDates,listOfTimes,listOfFollowers,listOfFollowing,listOfTopics,listOfResults):
         atributos = analize_corpus.tractarTweet(str(tweet))
         atributos.append(str(like))
         atributos.append(str(retweet))
@@ -86,6 +88,8 @@ with open('atributes.csv','w',newline='') as file:
         atributos.append(str(time))
         atributos.append(str(follower))
         atributos.append(str(following))
+        atributos.append(str(topic))
+        atributos.append(str(resulted))
         writer.writerow(atributos)
 
 print("--- FINISHED ---\n")

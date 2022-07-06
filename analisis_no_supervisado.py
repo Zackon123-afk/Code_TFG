@@ -14,7 +14,7 @@ pd.set_option('display.max_rows', None)
 
 ## PREPARACION DE PANDAS
 
-tweet_atributes = pd.read_csv('atributes.csv',engine='python')
+tweet_atributes = pd.read_csv('atributes_no_etiquetado.csv',engine='python')
 
 # original_stdout = sys.stdout
 # with open("describe.txt","w") as f:

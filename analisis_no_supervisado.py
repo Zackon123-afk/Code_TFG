@@ -6,7 +6,6 @@ from requests import head
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 import openpyxl
-
 import sys
 
 pd.set_option('display.max_columns', None)
@@ -17,7 +16,7 @@ pd.set_option('display.max_rows', None)
 tweet_atributes = pd.read_csv('atributes_no_etiquetado.csv',engine='python')
 
 # original_stdout = sys.stdout
-# with open("describe.txt","w") as f:
+# with open("describe_no_supervisado.txt","w") as f:
 #     sys.stdout = f
 #     print(tweet_atributes.describe(include='all'))
 #     sys.stdout = original_stdout
@@ -49,7 +48,7 @@ tweet_atributes_norm.fillna(0, inplace=True)
 
 # original_stdout = sys.stdout
 
-# with open("describe_norm.txt","w") as f:
+# with open("describe_norm_no_supervisado.txt","w") as f:
 #     sys.stdout = f
 #     print(tweet_atributes_norm.describe(include='all'))
 #     sys.stdout = original_stdout

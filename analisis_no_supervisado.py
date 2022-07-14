@@ -13,32 +13,34 @@ pd.set_option('display.max_rows', None)
 
 ## PREPARACION DE PANDAS
 
-tweet_atributes = pd.read_csv('atributes_no_etiquetado.csv',engine='python')
+tweet_atributes = pd.read_csv('atributes_etiquetado.csv',engine='python')
+tweet_atributes.drop(['violento'],axis=1,inplace=True)
+tweet_atributes.drop(['tema'],axis=1,inplace=True)
 
-# original_stdout = sys.stdout
-# with open("describe_no_supervisado.txt","w") as f:
-#     sys.stdout = f
-#     print(tweet_atributes.describe(include='all'))
-#     sys.stdout = original_stdout
+original_stdout = sys.stdout
+with open("describe_no_supervisado.txt","w") as f:
+    sys.stdout = f
+    print(tweet_atributes.describe(include='all'))
+    sys.stdout = original_stdout
 
 #Despues de sacar el describe.txt, eliminamos columnas innecesarias
 
-tweet_atributes.drop(['contVerbosEnPrimeraPersona'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosEnSegundaPersona'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosIndicativos'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosSubjuntivos'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosPresente'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosImperativo'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosPreterito'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosFuturo'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosCondicional'],axis=1,inplace=True)
+# tweet_atributes.drop(['contVerbosEnPrimeraPersona'],axis=1,inplace=True)
+# tweet_atributes.drop(['contVerbosEnSegundaPersona'],axis=1,inplace=True)
+# tweet_atributes.drop(['contVerbosIndicativos'],axis=1,inplace=True)
+# tweet_atributes.drop(['contVerbosSubjuntivos'],axis=1,inplace=True)
+# tweet_atributes.drop(['contVerbosPresente'],axis=1,inplace=True)
+# tweet_atributes.drop(['contVerbosImperativo'],axis=1,inplace=True)
+# tweet_atributes.drop(['contVerbosPreterito'],axis=1,inplace=True)
+# tweet_atributes.drop(['contVerbosFuturo'],axis=1,inplace=True)
+# tweet_atributes.drop(['contVerbosCondicional'],axis=1,inplace=True)
 
 # Canvi
 
 # tweet_atributes.drop(['seguits'],axis=1,inplace=True)
 # tweet_atributes.drop(['seguidors'],axis=1,inplace=True)
-tweet_atributes.drop(['hora'],axis=1,inplace=True)
-tweet_atributes.drop(['diaSetmana'],axis=1,inplace=True)
+# tweet_atributes.drop(['hora'],axis=1,inplace=True)
+# tweet_atributes.drop(['diaSetmana'],axis=1,inplace=True)
 # tweet_atributes.drop(['retweets'],axis=1,inplace=True)
 # tweet_atributes.drop(['likes'],axis=1,inplace=True)
 
@@ -46,12 +48,12 @@ tweet_atributes.drop(['diaSetmana'],axis=1,inplace=True)
 tweet_atributes_norm=(tweet_atributes-tweet_atributes.min())/(tweet_atributes.max()-tweet_atributes.min())
 tweet_atributes_norm.fillna(0, inplace=True)
 
-# original_stdout = sys.stdout
+original_stdout = sys.stdout
 
-# with open("describe_norm_no_supervisado.txt","w") as f:
-#     sys.stdout = f
-#     print(tweet_atributes_norm.describe(include='all'))
-#     sys.stdout = original_stdout
+with open("describe_norm_no_supervisado.txt","w") as f:
+    sys.stdout = f
+    print(tweet_atributes_norm.describe(include='all'))
+    sys.stdout = original_stdout
 
 # # PROCEDIMENT CODO DE JAMBU
 
@@ -82,25 +84,25 @@ tweet_atributes['KMeans_Clusters'] = clustering.labels_
 # Creamos un csv con los resultados
 tweet_atributes.to_excel('atributs_results.xlsx',index=False)
 
-# 1.Resultados de PCA en matriz de 2 dimensiones
+# # 1.Resultados de PCA en matriz de 2 dimensiones
 
-pca = PCA(n_components=2)
-pca_tweets = pca.fit_transform(tweet_atributes_norm)
-pca_tweets_df = pd.DataFrame(data=pca_tweets,columns=['Component_1','Component_2'])
-pca_names_tweets = pd.concat([pca_tweets_df, tweet_atributes[['KMeans_Clusters']]], axis=1)
+# pca = PCA(n_components=2)
+# pca_tweets = pca.fit_transform(tweet_atributes_norm)
+# pca_tweets_df = pd.DataFrame(data=pca_tweets,columns=['Component_1','Component_2'])
+# pca_names_tweets = pd.concat([pca_tweets_df, tweet_atributes[['KMeans_Clusters']]], axis=1)
 
-fig = plt.figure(figsize=(6,6))
+# fig = plt.figure(figsize=(6,6))
 
-ax = fig.add_subplot(1,1,1)
-ax.set_xlabel('Component 1', fontsize = 15)
-ax.set_ylabel('Component 2', fontsize = 15)
-ax.set_title('Componentes principales', fontsize=20)
+# ax = fig.add_subplot(1,1,1)
+# ax.set_xlabel('Component 1', fontsize = 15)
+# ax.set_ylabel('Component 2', fontsize = 15)
+# ax.set_title('Componentes principales', fontsize=20)
 
-color_theme = np.array(["blue","green","orange","red"])
-ax.scatter(x = pca_names_tweets.Component_1, y = pca_names_tweets.Component_2,
-    c=color_theme[pca_names_tweets.KMeans_Clusters], s = 50)
+# color_theme = np.array(["blue","green","orange","red"])
+# ax.scatter(x = pca_names_tweets.Component_1, y = pca_names_tweets.Component_2,
+#     c=color_theme[pca_names_tweets.KMeans_Clusters], s = 50)
 
-plt.show()
+# plt.show()
 
 # 2.Resultados de PCA con:
 
@@ -123,7 +125,7 @@ plt.show()
 
 # # 2.2. Que variables son las mas importantes
 
-# with open('nombre de funciones.txt','r') as file:
+# with open('nombre de funciones - no supervisado.txt','r') as file:
 #     header = file.read()
 #     header = header.split(',')
 

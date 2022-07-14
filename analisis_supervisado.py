@@ -2,6 +2,7 @@ from tkinter import Y
 import pandas as pd
 import matplotlib.pyplot as plt
 import sys
+import seaborn as sns
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import plot_tree
 
@@ -11,7 +12,11 @@ pd.set_option('display.max_rows', None)
 ## PREPARACION DE PANDAS
 
 tweet_atributes = pd.read_csv('atributes_etiquetado.csv',engine='python')
-tweet_atributes = pd.get_dummies(data=tweet_atributes, drop_first=False)
+
+# Triem si volem veure amb tema o sense tema
+
+# tweet_atributes = pd.get_dummies(data=tweet_atributes, drop_first=False)
+tweet_atributes.drop(['tema'],axis=1,inplace=True)
 
 # original_stdout = sys.stdout
 # with open("describe_supervisado.txt","w") as f:
@@ -35,13 +40,10 @@ tweet_atributes.drop(['contVerbosCondicional'],axis=1,inplace=True)
 
 # tweet_atributes.drop(['seguits'],axis=1,inplace=True)
 # tweet_atributes.drop(['seguidors'],axis=1,inplace=True)
-tweet_atributes.drop(['hora'],axis=1,inplace=True)
-tweet_atributes.drop(['diaSetmana'],axis=1,inplace=True)
+# tweet_atributes.drop(['hora'],axis=1,inplace=True)
+# tweet_atributes.drop(['diaSetmana'],axis=1,inplace=True)
 # tweet_atributes.drop(['retweets'],axis=1,inplace=True)
 # tweet_atributes.drop(['likes'],axis=1,inplace=True)
-
-tweet_atributes_norm=(tweet_atributes-tweet_atributes.min())/(tweet_atributes.max()-tweet_atributes.min())
-tweet_atributes_norm.fillna(0, inplace=True)
 
 # original_stdout = sys.stdout
 # with open("describe_norm_supervisado.txt","w") as f:
@@ -53,11 +55,11 @@ tweet_atributes_norm.fillna(0, inplace=True)
 
 # INICIO DEL MODEL DE DECISION TREE
 
-explicativas = tweet_atributes_norm.drop(['violento'],axis=1)
+explicativas = tweet_atributes.drop(['violento'],axis=1)
 objetivo = tweet_atributes.violento
 
 # Utilizamos el hiperparametro max_depth para acotar el arbol
-model = DecisionTreeClassifier(max_depth=3)
+model = DecisionTreeClassifier(max_depth=10)
 
 model.fit(X=explicativas, y=objetivo)
 
@@ -65,3 +67,7 @@ model.fit(X=explicativas, y=objetivo)
 
 plt.figure(figsize=(14,8))
 plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10);
+
+# INTERPRETAMOS EL MODELO
+
+# sns.histplot(x=tweet_atributes.tema_P, hue=tweet_atributes.violento)

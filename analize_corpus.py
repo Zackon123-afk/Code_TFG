@@ -4,7 +4,7 @@ import nltk
 from nltk import word_tokenize, TweetTokenizer
 import unicodedata
 
-nltk.download('stopwords', quiet=True)
+#CARGAR FITXEROS Y LIBRERIAS
 
 SPECIAL_CHARS = ['#','%','$','&','/','º','ª','¨','^','*','<','¨','{','}','>','(',')','€','=']
 FINAL_MARKS = ['.','?','!']
@@ -24,74 +24,62 @@ ADVERBIOS_NEG = ['no','nunca','ni','tampoco','jamas']
 ADVERBIOS_DUD = ['quiza','quizas','probablemente','puede','posiblemente','acaso']
 ADJETIVOS_CANT = ['mucho','poco','bastante','demasiado','suficiente','extremado','excesivo','absoluto','aproximado']
 
-insultos = []
+insu_f = open('insultos.txt','r')
+temp = insu_f.read()
+insultos = temp.split(sep=',')
 
-ending_in_first_person = []
-ending_in_second_person = []
-ending_in_subj = []
-ending_in_indi = []
-ending_in_pret = []
-ending_in_futu = []
-ending_in_pres = []
-ending_in_impe = []
-ending_in_cond = []
+pri_pers_f = open('1era_persona.txt','r')
+temp = pri_pers_f.read()
+ending_in_first_person = temp.split(sep=',')
+
+seg_pers_f = open('2nda_persona.txt','r')
+temp = seg_pers_f.read()
+ending_in_second_person = temp.split(sep=',')
+
+subj_f = open('subjuntivo.txt','r')
+temp = subj_f.read()
+ending_in_subj = temp.split(sep=',')
+
+indi_f = open('indicativo.txt','r')
+temp = indi_f.read()
+ending_in_indi = temp.split(sep=',')
+
+pret_f = open('preterito.txt','r')
+temp = pret_f.read()
+ending_in_pret = temp.split(sep=',')
+
+futu_f = open('futuro.txt','r')
+temp = futu_f.read()
+ending_in_futu = temp.split(sep=',')
+
+pres_f = open('presente.txt','r')
+temp = pres_f.read()
+ending_in_pres = temp.split(sep=',')
+
+impe_f = open('imperativo.txt','r')
+temp = impe_f.read()
+ending_in_impe = temp.split(sep=',')
+
+cond_f = open('condicional.txt','r')
+temp = cond_f.read()
+ending_in_cond = temp.split(sep=',')
+
+pri_pers_f.close()
+seg_pers_f.close()
+subj_f.close()
+indi_f.close()
+pret_f.close()
+futu_f.close()
+pres_f.close()
+impe_f.close()
+cond_f.close()
+insu_f.close()
 
 tweet_tokenizer = TweetTokenizer()
 
-nlp = spacy.load('es_core_news_md')
+nlp = spacy.load('es_core_news_sm')
 
-#CARGAR FITXEROS
-def initializeFiles():
-    pri_pers_f = open('1era_persona.txt','r')
-    temp = pri_pers_f.read()
-    ending_in_first_person = temp.split(sep=',')
-
-    seg_pers_f = open('2nda_persona.txt','r')
-    temp = seg_pers_f.read()
-    ending_in_second_person = temp.split(sep=',')
-
-    subj_f = open('subjuntivo.txt','r')
-    temp = subj_f.read()
-    ending_in_subj = temp.split(sep=',')
-
-    indi_f = open('indicativo.txt','r')
-    temp = indi_f.read()
-    ending_in_indi = temp.split(sep=',')
-
-    pret_f = open('preterito.txt','r')
-    temp = pret_f.read()
-    ending_in_pret = temp.split(sep=',')
-
-    futu_f = open('futuro.txt','r')
-    temp = futu_f.read()
-    ending_in_futu = temp.split(sep=',')
-
-    pres_f = open('presente.txt','r')
-    temp = pres_f.read()
-    ending_in_pres = temp.split(sep=',')
-
-    impe_f = open('imperativo.txt','r')
-    temp = impe_f.read()
-    ending_in_impe = temp.split(sep=',')
-
-    cond_f = open('condicional.txt','r')
-    temp = cond_f.read()
-    ending_in_cond = temp.split(sep=',')
-
-    insu_f = open('insultos.txt','r')
-    temp = insu_f.read()
-    insultos = temp.split(sep=',')
-
-    pri_pers_f.close()
-    seg_pers_f.close()
-    subj_f.close()
-    indi_f.close()
-    pret_f.close()
-    futu_f.close()
-    pres_f.close()
-    impe_f.close()
-    cond_f.close()
-    insu_f.close()
+nltk.download('stopwords', quiet=True)
 
 ##CARACTERES Y SIGNOS
 
@@ -518,7 +506,7 @@ def contAdverbiosNeg(stringToCheck):
     doc = nlp(stringToCheck)
     for token in doc:
         if str(token.pos_) == 'ADV':
-            if any(str(token) == ad for ad in ADVERBIOS_NEG):
+            if any(str(token).endswith(s) for s in ADVERBIOS_NEG):
                 sum = sum + 1
     return sum
 
@@ -529,7 +517,7 @@ def contAdverbiosDud(stringToCheck):
     doc = nlp(stringToCheck)
     for token in doc:
         if str(token.pos_) == 'ADV':
-            if any(str(token) == ad for ad in ADVERBIOS_DUD):
+            if any(str(token).endswith(s) for s in ADVERBIOS_DUD):
                 sum = sum + 1
     return sum
 
@@ -542,7 +530,7 @@ def contAdjetivosCant(stringToCheck):
     doc = nlp(stringToCheck)
     for token in doc:
         if str(token.pos_) == 'ADJ':
-            if any(str(token) == ad for ad in ADJETIVOS_CANT):
+            if any(str(token).endswith(s) for s in ADVERBIOS_CANT):
                 sum = sum + 1
     return sum
 
@@ -552,15 +540,12 @@ def contInsultos(stringToCheck):
     stringToCheck = unicodedata.normalize("NFKD", stringToCheck).encode("ascii","ignore").decode("ascii")
     doc = nlp(stringToCheck)
     for token in doc:
-        if str(token.pos_) == 'ADJ':
-            if any(str(token) == ad for ad in ADJETIVOS_CANT):
-                sum = sum + 1
+        if any(str(token).endswith(s) for s in insultos):
+            sum = sum + 1
     return sum
 
 #TRACTAMENT TWEET
 def tractarTweet(tweetAAnalitzar):
-
-    initializeFiles()
 
     tweetAAnalitzarMinuscula = ''.join([letter.lower() for letter in tweetAAnalitzar])
 
@@ -601,6 +586,7 @@ def tractarTweet(tweetAAnalitzar):
     list_atrib.append(contAdverbiosNeg(tweetAAnalitzarMinuscula))
     list_atrib.append(contAdverbiosDud(tweetAAnalitzarMinuscula))
     list_atrib.append(contAdjetivosCant(tweetAAnalitzarMinuscula))
+    list_atrib.append(contInsultos(tweetAAnalitzarMinuscula))
 
     return list_atrib
  

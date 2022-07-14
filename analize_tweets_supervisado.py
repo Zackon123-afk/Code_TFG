@@ -6,10 +6,6 @@ import csv
 import tweepy
 import json
 
-
-
-
-
 def tweeterInformation(usernames):
 
     followers = []

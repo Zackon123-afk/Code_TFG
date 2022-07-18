@@ -15,59 +15,99 @@ tweet_atributes = pd.read_csv('atributes_etiquetado.csv',engine='python')
 
 # Triem si volem veure amb tema o sense tema
 
-# tweet_atributes = pd.get_dummies(data=tweet_atributes, drop_first=False)
-tweet_atributes.drop(['tema'],axis=1,inplace=True)
-
-# original_stdout = sys.stdout
-# with open("describe_supervisado.txt","w") as f:
-#     sys.stdout = f
-#     print(tweet_atributes.describe(include='all'))
-#     sys.stdout = original_stdout
-
-#Despues de sacar el describe.txt, eliminamos columnas innecesarias
-
-tweet_atributes.drop(['contVerbosEnPrimeraPersona'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosEnSegundaPersona'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosIndicativos'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosSubjuntivos'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosPresente'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosImperativo'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosPreterito'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosFuturo'],axis=1,inplace=True)
-tweet_atributes.drop(['contVerbosCondicional'],axis=1,inplace=True)
-
-# Canvi
-
-# tweet_atributes.drop(['seguits'],axis=1,inplace=True)
-# tweet_atributes.drop(['seguidors'],axis=1,inplace=True)
-# tweet_atributes.drop(['hora'],axis=1,inplace=True)
-# tweet_atributes.drop(['diaSetmana'],axis=1,inplace=True)
-# tweet_atributes.drop(['retweets'],axis=1,inplace=True)
-# tweet_atributes.drop(['likes'],axis=1,inplace=True)
-
-# original_stdout = sys.stdout
-# with open("describe_norm_supervisado.txt","w") as f:
-#     sys.stdout = f
-#     print(tweet_atributes_norm.describe(include='all'))
-#     sys.stdout = original_stdout
+tweet_atributes = pd.get_dummies(data=tweet_atributes, drop_first=False)
 
 # Seleccio de variables
 
+condition = tweet_atributes['tema_C'] == 1
+tweet_atributes_tema_C = tweet_atributes[condition]
+tweet_atributes_tema_C.drop(['tema_C'],axis=1,inplace=True)
+
+condition = tweet_atributes['tema_F'] == 1
+tweet_atributes_tema_F = tweet_atributes[condition]
+tweet_atributes_tema_F.drop(['tema_F'],axis=1,inplace=True)
+
+condition = tweet_atributes['tema_P'] == 1
+tweet_atributes_tema_P = tweet_atributes[condition]
+tweet_atributes_tema_P.drop(['tema_P'],axis=1,inplace=True)
+
+condition = tweet_atributes['tema_S'] == 1
+tweet_atributes_tema_S = tweet_atributes[condition]
+tweet_atributes_tema_S.drop(['tema_S'],axis=1,inplace=True)
+
+condition = tweet_atributes['tema_TV'] == 1
+tweet_atributes_tema_TV = tweet_atributes[condition]
+tweet_atributes_tema_TV.drop(['tema_TV'],axis=1,inplace=True)
+
 # INICIO DEL MODEL DE DECISION TREE
 
-explicativas = tweet_atributes.drop(['violento'],axis=1)
-objetivo = tweet_atributes.violento
+plt.figure(figsize=(14,8))
+
+# Modelo con el tema del Covid
+
+explicativas = tweet_atributes_tema_C.drop(['violento'],axis=1)
+objetivo = tweet_atributes_tema_C.violento
 
 # Utilizamos el hiperparametro max_depth para acotar el arbol
-model = DecisionTreeClassifier(max_depth=10)
-
+model = DecisionTreeClassifier(max_depth=4)
 model.fit(X=explicativas, y=objetivo)
 
 # Visualizamos el modelo
 
-plt.figure(figsize=(14,8))
 plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10);
 
-# INTERPRETAMOS EL MODELO
 
-# sns.histplot(x=tweet_atributes.tema_P, hue=tweet_atributes.violento)
+# Modelo con el tema del Futbol
+
+explicativas = tweet_atributes_tema_F.drop(['violento'],axis=1)
+objetivo = tweet_atributes_tema_F.violento
+
+# Utilizamos el hiperparametro max_depth para acotar el arbol
+model = DecisionTreeClassifier(max_depth=4)
+model.fit(X=explicativas, y=objetivo)
+
+# Visualizamos el modelo
+
+plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10);
+
+
+# Modelo con el tema del Polític
+
+explicativas = tweet_atributes_tema_P.drop(['violento'],axis=1)
+objetivo = tweet_atributes_tema_P.violento
+
+# Utilizamos el hiperparametro max_depth para acotar el arbol
+model = DecisionTreeClassifier(max_depth=4)
+model.fit(X=explicativas, y=objetivo)
+
+# Visualizamos el modelo
+
+plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10, title='Classificació en tema Polític');
+
+
+# Modelo con el tema del Social
+
+explicativas = tweet_atributes_tema_S.drop(['violento'],axis=1)
+objetivo = tweet_atributes_tema_S.violento
+
+# Utilizamos el hiperparametro max_depth para acotar el arbol
+model = DecisionTreeClassifier(max_depth=4)
+model.fit(X=explicativas, y=objetivo)
+
+# Visualizamos el modelo
+
+plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10);
+
+
+# Modelo con el tema del Televisió
+
+explicativas = tweet_atributes_tema_TV.drop(['violento'],axis=1)
+objetivo = tweet_atributes_tema_TV.violento
+
+# Utilizamos el hiperparametro max_depth para acotar el arbol
+model = DecisionTreeClassifier(max_depth=4)
+model.fit(X=explicativas, y=objetivo)
+
+# Visualizamos el modelo
+
+plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10);

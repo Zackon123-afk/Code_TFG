@@ -14,46 +14,25 @@ pd.set_option('display.max_rows', None)
 ## PREPARACION DE PANDAS
 
 tweet_atributes = pd.read_csv('atributes_etiquetado.csv',engine='python')
-tweet_atributes.drop(['violento'],axis=1,inplace=True)
-tweet_atributes.drop(['tema'],axis=1,inplace=True)
+atributes_to_analize = tweet_atributes.drop(['violento'],axis=1)
+atributes_to_analize.drop(['tema'],axis=1,inplace=True)
 
-original_stdout = sys.stdout
-with open("describe_no_supervisado.txt","w") as f:
-    sys.stdout = f
-    print(tweet_atributes.describe(include='all'))
-    sys.stdout = original_stdout
+# original_stdout = sys.stdout
+# with open("describe_no_supervisado.txt","w") as f:
+#     sys.stdout = f
+#     print(atributes_to_analize.describe(include='all'))
+#     sys.stdout = original_stdout
 
-#Despues de sacar el describe.txt, eliminamos columnas innecesarias
+# Normalizamos la data
 
-# tweet_atributes.drop(['contVerbosEnPrimeraPersona'],axis=1,inplace=True)
-# tweet_atributes.drop(['contVerbosEnSegundaPersona'],axis=1,inplace=True)
-# tweet_atributes.drop(['contVerbosIndicativos'],axis=1,inplace=True)
-# tweet_atributes.drop(['contVerbosSubjuntivos'],axis=1,inplace=True)
-# tweet_atributes.drop(['contVerbosPresente'],axis=1,inplace=True)
-# tweet_atributes.drop(['contVerbosImperativo'],axis=1,inplace=True)
-# tweet_atributes.drop(['contVerbosPreterito'],axis=1,inplace=True)
-# tweet_atributes.drop(['contVerbosFuturo'],axis=1,inplace=True)
-# tweet_atributes.drop(['contVerbosCondicional'],axis=1,inplace=True)
+atributes_to_analize_norm=(atributes_to_analize-atributes_to_analize.min())/(atributes_to_analize.max()-atributes_to_analize.min())
+atributes_to_analize_norm.fillna(0, inplace=True)
 
-# Canvi
-
-# tweet_atributes.drop(['seguits'],axis=1,inplace=True)
-# tweet_atributes.drop(['seguidors'],axis=1,inplace=True)
-# tweet_atributes.drop(['hora'],axis=1,inplace=True)
-# tweet_atributes.drop(['diaSetmana'],axis=1,inplace=True)
-# tweet_atributes.drop(['retweets'],axis=1,inplace=True)
-# tweet_atributes.drop(['likes'],axis=1,inplace=True)
-
-
-tweet_atributes_norm=(tweet_atributes-tweet_atributes.min())/(tweet_atributes.max()-tweet_atributes.min())
-tweet_atributes_norm.fillna(0, inplace=True)
-
-original_stdout = sys.stdout
-
-with open("describe_norm_no_supervisado.txt","w") as f:
-    sys.stdout = f
-    print(tweet_atributes_norm.describe(include='all'))
-    sys.stdout = original_stdout
+# original_stdout = sys.stdout
+# with open("describe_norm_no_supervisado.txt","w") as f:
+#     sys.stdout = f
+#     print(atributes_to_analize_norm.describe(include='all'))
+#     sys.stdout = original_stdout
 
 # # PROCEDIMENT CODO DE JAMBU
 
@@ -61,10 +40,10 @@ with open("describe_norm_no_supervisado.txt","w") as f:
 
 # for i in range(1,15):
 #     kmeans = KMeans(n_clusters=i, max_iter= 300)
-#     kmeans.fit(tweet_atributes_norm) #Aplicamos K-means a la base de datos
+#     kmeans.fit(atributes_to_analize_norm) #Aplicamos K-means a la base de datos
 #     wcss.append(kmeans.inertia_)
 
-# #Aplicamos Codo de Jambú
+# # Aplicamos Codo de Jambú
 
 # plt.plot(range(1,15),wcss)
 # plt.title("Codo de Jambú")
@@ -73,16 +52,66 @@ with open("describe_norm_no_supervisado.txt","w") as f:
 # plt.show()
 
 
-## EJECTUTAMOS EL CLUSTERING Y ANALIZAMOS
+# # EJECTUTAMOS EL CLUSTERING
+
+# Primero preparamos los .csv para el estudio
+
+tweet_atributes_3_clusters = tweet_atributes.drop(['tema'],axis=1)
+tweet_atributes_4_clusters = tweet_atributes.drop(['tema'],axis=1)
+tweet_atributes_5_clusters = tweet_atributes.drop(['tema'],axis=1)
+tweet_atributes_6_clusters = tweet_atributes.drop(['tema'],axis=1)
+
+# EMPEZAMOS EL ANALISIS
+
+# Analizamos con 3 clusters
 
 clustering = KMeans(n_clusters=3,max_iter=300)
-clustering.fit(tweet_atributes_norm)
+clustering.fit(atributes_to_analize_norm)
 
 # Añadimos los clusters a la matriz de información
-tweet_atributes['KMeans_Clusters'] = clustering.labels_
+tweet_atributes_3_clusters['KMeans_Clusters'] = clustering.labels_
 
 # Creamos un csv con los resultados
-tweet_atributes.to_excel('atributs_results.xlsx',index=False)
+tweet_atributes_3_clusters.to_csv('atributs_results_3_clusters.csv',index=False)
+
+
+# Analizamos con 4 clusters
+
+clustering = KMeans(n_clusters=4,max_iter=300)
+clustering.fit(atributes_to_analize_norm)
+
+# Añadimos los clusters a la matriz de información
+tweet_atributes_4_clusters['KMeans_Clusters'] = clustering.labels_
+
+# Creamos un csv con los resultados
+tweet_atributes_4_clusters.to_csv('atributs_results_4_clusters.csv',index=False)
+
+
+# Analizamos con 3 clusters
+
+clustering = KMeans(n_clusters=5,max_iter=300)
+clustering.fit(atributes_to_analize_norm)
+
+# Añadimos los clusters a la matriz de información
+tweet_atributes_5_clusters['KMeans_Clusters'] = clustering.labels_
+
+# Creamos un csv con los resultados
+tweet_atributes_5_clusters.to_csv('atributs_results_5_clusters.csv',index=False)
+
+
+# Analizamos con 3 clusters
+
+clustering = KMeans(n_clusters=6,max_iter=300)
+clustering.fit(atributes_to_analize_norm)
+
+# Añadimos los clusters a la matriz de información
+tweet_atributes_6_clusters['KMeans_Clusters'] = clustering.labels_
+
+# Creamos un csv con los resultados
+tweet_atributes_6_clusters.to_csv('atributs_results_6_clusters.csv',index=False)
+
+
+
 
 # # 1.Resultados de PCA en matriz de 2 dimensiones
 

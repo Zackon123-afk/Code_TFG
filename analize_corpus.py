@@ -91,6 +91,7 @@ def checkSpecialChar(char):
         return 1
     else:
         return 0
+        
 
 #Contador de menciones
 def contMencion(stringToCheck):
@@ -100,6 +101,17 @@ def contMencion(stringToCheck):
         if i[0] == '@':
             sum += 1
     return sum
+
+#Contador unico de menciones
+def contUnicMencion(stringToCheck) :
+    list_specialchars = dict([])
+    for i in stringToCheck:
+        if i[0] == '@':
+            if ( list_specialchars.get(i) == None ):
+                list_specialchars[i] = 1
+            else:
+                list_specialchars[i] = int(list_specialchars[i]) + 1
+    return list_specialchars
 
 #Contador de palabras con @ en medio
 def contPalabrasConArrDentro(stringToCheck) :
@@ -161,6 +173,20 @@ def contCaracMayusculas(stringtoCheck):
             sum += 1
         i += 1
     return round((sum/len(stringGo))*100,3)
+
+#Contar caracteres unicos en mayusculas
+def contCaracUnicMayuscula(stringtoCheck):
+    list_letr = dict([])
+    i = 1
+    stringGo = stringtoCheck.replace(" ","")
+    while i < len(stringGo):
+        if (stringGo[i].isupper()) and (stringGo[i-1] not in FINAL_MARKS):
+            if ( list_letr.get(stringGo[i]) == None ):
+                list_letr[stringGo[i]] = 1
+            else:
+                list_letr[stringGo[i]] = int(list_letr[stringGo[i]]) + 1
+        i += 1
+    return(list_letr)
 
 #LETRAS REPETIDAS
 
@@ -231,6 +257,18 @@ def contOnomato(stringToCheck):
             sum += 1
     return sum
 
+#Contador unico de onomatopeyas
+def contUnicOnomato(stringtoCheck):
+    list_sign = dict([])
+    string_to_analize = word_tokenize(stringtoCheck)
+    for i in string_to_analize:
+        if any((w in i) or (i in w) for w in ONOMATOPEYAS):
+            if ( list_sign.get(i) ==  None ):
+                list_sign[i] = 1
+            else:
+                list_sign[i] = int(list_sign[i]) + 1
+    return list_sign
+
 # INTERJECCIONES
 
 #Contador de interjecciones
@@ -242,6 +280,18 @@ def contInterj(stringToCheck):
             sum += 1
     return sum
 
+#Contador unico de interjecciones
+def contUnicInterj(stringtoCheck):
+    list_sign = dict([])
+    string_to_analize = word_tokenize(stringtoCheck)
+    for i in string_to_analize:
+        if any((w in i) or (i in w) for w in INTERJECCIONES):
+            if ( list_sign.get(i) ==  None ):
+                list_sign[i] = 1
+            else:
+                list_sign[i] = int(list_sign[i]) + 1
+    return list_sign
+
 # INTERPELACIONES
 
 #Contador de interpelaciones
@@ -252,6 +302,18 @@ def contInterpelac(stringToCheck):
         if any((w in i) or (i in w) for w in INTERPELACIONES):
             sum += 1
     return sum
+
+#Contador unico de interpelaciones
+def contUnicInterpelac(stringtoCheck):
+    list_sign = dict([])
+    string_to_analize = word_tokenize(stringtoCheck)
+    for i in string_to_analize:
+        if any((w in i) or (i in w) for w in INTERPELACIONES):
+            if ( list_sign.get(i) ==  None ):
+                list_sign[i] = 1
+            else:
+                list_sign[i] = int(list_sign[i]) + 1
+    return list_sign
 
 ## MORFOLOGICOS
 
@@ -267,6 +329,19 @@ def contDiminutiv(stringToCheck):
                 sum += 1
     return sum
 
+#Contador unico de diminutivos
+def contUnicDiminutiv(stringtoCheck):
+    list_sign = dict([])
+    doc = nlp(stringtoCheck)
+    for token in doc:
+        if 'ADJ' == token.pos_ or 'NOUN' == token.pos_:
+            if any (str(token).endswith(w) for w in DIMINUTIVOS):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
+
 #AUMENTATIVOS
 
 #Contador de aumentativos
@@ -278,6 +353,19 @@ def contAumentativ(stringToCheck):
             if any (str(token).endswith(w) for w in AUGMENTATIVOS):
                 sum += 1
     return sum
+
+#Contador unico de aumentativos
+def contUnicAumentativ(stringtoCheck):
+    list_sign = dict([])
+    doc = nlp(stringtoCheck)
+    for token in doc:
+        if 'ADJ' == token.pos_ or 'NOUN' == token.pos_:
+            if any (str(token).endswith(w) for w in AUGMENTATIVOS):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
 
 #PEYORATIVOS
 
@@ -303,6 +391,19 @@ def contSuperlativ(stringToCheck):
                 sum += 1
     return sum
 
+#Contador unico de superlativos
+def contUnicSuperlativ(stringtoCheck):
+    list_sign = dict([])
+    doc = nlp(stringtoCheck)
+    for token in doc:
+        if token.pos_ =='ADJ' or token.pos_ == 'NOUN':
+            if any (str(token).endswith(w) for w in SUPERLATIVOS):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
+
 ## LEXICOS
 
 #ARTICULOS
@@ -316,6 +417,18 @@ def contDeterminantes(stringToCheck):
             sum += 1
     return sum
 
+#Contador unico de determinantes
+def contUnicDeterminantes(stringtoCheck):
+    list_sign = dict([])
+    string_to_analize = word_tokenize(stringtoCheck)
+    for i in string_to_analize:
+        if i == "el" or i == "la" or i == "los" or i == "las":
+            if ( list_sign.get(i) ==  None ):
+                list_sign[i] = 1
+            else:
+                list_sign[i] = int(list_sign[i]) + 1
+    return list_sign
+
 #Contador de indeterminados
 def contIndeterminados(stringToCheck):
     sum = 0
@@ -325,6 +438,18 @@ def contIndeterminados(stringToCheck):
             sum += 1
     return sum
 
+#Contador unico de indeterminantes
+def contUnicIndeterminantes(stringtoCheck):
+    list_sign = dict([])
+    string_to_analize = word_tokenize(stringtoCheck)
+    for i in string_to_analize:
+        if i == "un" or i == "una" or i == "unos" or i == "unas":
+            if ( list_sign.get(i) ==  None ):
+                list_sign[i] = 1
+            else:
+                list_sign[i] = int(list_sign[i]) + 1
+    return list_sign
+
 #Contador de demostrativos
 def contDemostrativos(stringToCheck):
     sum = 0
@@ -333,6 +458,18 @@ def contDemostrativos(stringToCheck):
         if i == "este" or i == "esta" or i == "aquel" or i == "aquella":
             sum += 1
     return sum
+
+#Contador unico de demostrativos
+def contUnicDemostrativos(stringtoCheck):
+    list_sign = dict([])
+    string_to_analize = word_tokenize(stringtoCheck)
+    for i in string_to_analize:
+        if i == "este" or i == "esta" or i == "aquel" or i == "aquella":
+            if ( list_sign.get(i) ==  None ):
+                list_sign[i] = 1
+            else:
+                list_sign[i] = int(list_sign[i]) + 1
+    return list_sign
 
 #PRONOMBRES
 
@@ -345,6 +482,18 @@ def contPronombres1era(stringToCheck):
             sum += 1
     return sum
 
+#Contador unico de pronombres en 1era persona
+def contUnicPronombres1era(stringtoCheck):
+    list_sign = dict([])
+    string_to_analize = word_tokenize(stringtoCheck)
+    for i in string_to_analize:
+        if i == "yo" or i == "nosotros" or i == "nosotras" :
+            if ( list_sign.get(i) ==  None ):
+                list_sign[i] = 1
+            else:
+                list_sign[i] = int(list_sign[i]) + 1
+    return list_sign
+
 #Contador de pronombres de 2nda persona
 def contPronombres2ona(stringToCheck):
     sum = 0
@@ -354,9 +503,21 @@ def contPronombres2ona(stringToCheck):
             sum += 1
     return sum
 
+#Contador unico de pronombres en 2ona persona
+def contUnicPronombres2ona(stringtoCheck):
+    list_sign = dict([])
+    string_to_analize = word_tokenize(stringtoCheck)
+    for i in string_to_analize:
+        if i == "tu" or i == "vosotros" or i == "vosotras" :
+            if ( list_sign.get(i) ==  None ):
+                list_sign[i] = 1
+            else:
+                list_sign[i] = int(list_sign[i]) + 1
+    return list_sign
+
 #VERBOS
 
-#Contador de verbos Ser
+#Contador de verbos Ser Estar Parecer
 def contVerbosSerEstarParecer(stringToCheck):
     sum = 0
     doc = nlp(stringToCheck)
@@ -364,6 +525,18 @@ def contVerbosSerEstarParecer(stringToCheck):
         if str(token.lemma_) == 'ser' or str(token.lemma_) == 'estar' or str(token.lemma_) == 'parecer':
             sum = sum + 1
     return sum
+
+#Contador unico de verbos Ser Estar Parecer
+def contUnicVerbosSerEstarParecer(stringtoCheck):
+    list_sign = dict([])
+    doc = nlp(stringtoCheck)
+    for token in doc:
+        if str(token.lemma_) == 'ser' or str(token.lemma_) == 'estar' or str(token.lemma_) == 'parecer':
+            if ( list_sign.get(str(token)) ==  None ):
+                list_sign[str(token)] = 1
+            else:
+                list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
 
 #Contador de verbos en 1era persona
 def contVerbosEnPrimeraPersona(stringToCheck):
@@ -376,6 +549,20 @@ def contVerbosEnPrimeraPersona(stringToCheck):
                 sum = sum + 1
     return sum
 
+#Contador unico de verbos en 1era persona
+def contUnicVerbosEnPrimeraPersona(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if any(str(token).endswith(s) for s in ending_in_first_person):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
+
 #Contador de verbos en 2nda persona
 def contVerbosEnSegundaPersona(stringToCheck):
     sum = 0
@@ -386,6 +573,20 @@ def contVerbosEnSegundaPersona(stringToCheck):
             if any(str(token).endswith(s) for s in ending_in_second_person):
                 sum = sum + 1
     return sum
+
+#Contador unico de verbos en 2nda persona
+def contUnicVerbosEnSegundaPersona(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if any(str(token).endswith(s) for s in ending_in_second_person):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
 
 #Contador de verbos subjuntivos
 def contVerbosSubjuntivos(stringToCheck):
@@ -398,6 +599,20 @@ def contVerbosSubjuntivos(stringToCheck):
                 sum = sum + 1
     return sum
 
+#Contador unico de verbos subjuntivos
+def contUnicVerbosEnSegundaPersona(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if any(str(token).endswith(s) for s in ending_in_subj):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
+
 #Contador de verbos indicativos
 def contVerbosIndicativos(stringToCheck):
     sum = 0
@@ -408,6 +623,20 @@ def contVerbosIndicativos(stringToCheck):
             if any(str(token).endswith(s) for s in ending_in_indi):
                 sum = sum + 1
     return sum
+
+#Contador unico de verbos indicativos
+def contUnicVerbosIndicativos(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if any(str(token).endswith(s) for s in ending_in_indi):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
 
 #Contador de verbos en preterito
 def contVerbosPreterito(stringToCheck):
@@ -420,6 +649,20 @@ def contVerbosPreterito(stringToCheck):
                 sum = sum + 1
     return sum
 
+#Contador unico de verbos indicativos
+def contUnicVerbosPreterito(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if any(str(token).endswith(s) for s in ending_in_pret):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
+
 #Contador de verbos en futuro
 def contVerbosFuturo(stringToCheck):
     sum = 0
@@ -430,6 +673,20 @@ def contVerbosFuturo(stringToCheck):
             if any(str(token).endswith(s) for s in ending_in_futu):
                 sum = sum + 1
     return sum
+
+#Contador unico de verbos futuros
+def contUnicVerbosFuturo(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if any(str(token).endswith(s) for s in ending_in_futu):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
 
 #Contador de verbos en presente
 def contVerbosPresente(stringToCheck):
@@ -442,6 +699,20 @@ def contVerbosPresente(stringToCheck):
                 sum = sum + 1
     return sum
 
+#Contador unico de verbos futuros
+def contUnicVerbosPresente(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if any(str(token).endswith(s) for s in ending_in_pres):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
+
 #Contador de verbos en imperativo
 def contVerbosImperativo(stringToCheck):
     sum = 0
@@ -452,6 +723,20 @@ def contVerbosImperativo(stringToCheck):
             if any(str(token).endswith(s) for s in ending_in_impe):
                 sum = sum + 1
     return sum
+
+#Contador unico de verbos imperativos
+def contUnicVerbosImperativos(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if any(str(token).endswith(s) for s in ending_in_impe):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
 
 #Contador de verbos en participio
 def contVerbosParticipio(stringToCheck):
@@ -464,6 +749,20 @@ def contVerbosParticipio(stringToCheck):
                 sum = sum + 1
     return sum
 
+#Contador unico de verbos en participio
+def contUnicVerbosParticipio(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if str(token.morph.get('VerbForm')) == '[\'Part\']':
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
+
 #Contador de verbos en gerundio
 def contVerbosGerundio(stringToCheck):
     sum = 0
@@ -474,6 +773,20 @@ def contVerbosGerundio(stringToCheck):
             if str(token.morph.get('VerbForm')) == '[\'Ger\']':
                 sum = sum + 1
     return sum
+
+#Contador unico de verbos en gerundio
+def contUnicVerbosGerundio(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if str(token.morph.get('VerbForm')) == '[\'Ger\']':
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
 
 #Contador de verbos en condicional
 def contVerbosCondicional(stringToCheck):
@@ -486,6 +799,20 @@ def contVerbosCondicional(stringToCheck):
                 sum = sum + 1
     return sum
 
+#Contador unico de verbos condicional
+def contUnicVerbosCondicional(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'VERB' or str(token.pos_) == 'AUX':
+            if any(str(token).endswith(s) for s in ending_in_cond):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
+
 # ADVERBIOS
 
 #Contador de adverbios de cantidad
@@ -495,9 +822,23 @@ def contAdverbiosCant(stringToCheck):
     doc = nlp(stringToCheck)
     for token in doc:
         if str(token.pos_) == 'ADV':
-            if any(str(token) == ad for ad in ADVERBIOS_CANT):
+            if any(str(token).endswith(s) for s in ADVERBIOS_CANT):
                 sum = sum + 1
     return sum
+
+#Contador unico de adverbios de cantidad
+def contUnicAdverbiosCant(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'ADV':
+            if any(str(token).endswith(s) for s in ADVERBIOS_CANT):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
 
 #Contador de adverbios de negacion
 def contAdverbiosNeg(stringToCheck):
@@ -510,6 +851,20 @@ def contAdverbiosNeg(stringToCheck):
                 sum = sum + 1
     return sum
 
+#Contador unico de adverbios de negacion
+def contUnicAdverbiosNeg(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'ADV':
+            if any(str(token).endswith(s) for s in ADVERBIOS_NEG):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
+
 #Contador de adverbios de duda
 def contAdverbiosDud(stringToCheck):
     sum = 0
@@ -520,6 +875,20 @@ def contAdverbiosDud(stringToCheck):
             if any(str(token).endswith(s) for s in ADVERBIOS_DUD):
                 sum = sum + 1
     return sum
+
+#Contador unico de adverbios de duda
+def contUnicAdverbiosDud(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if str(token.pos_) == 'ADV':
+            if any(str(token).endswith(s) for s in ADVERBIOS_DUD):
+                if ( list_sign.get(str(token)) ==  None ):
+                    list_sign[str(token)] = 1
+                else:
+                    list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
 
 # ADJETIVOS
 
@@ -535,6 +904,8 @@ def contAdjetivosCant(stringToCheck):
     return sum
 
 # INSULTOS
+
+#Contador de insultos
 def contInsultos(stringToCheck):
     sum = 0
     stringToCheck = unicodedata.normalize("NFKD", stringToCheck).encode("ascii","ignore").decode("ascii")
@@ -543,6 +914,19 @@ def contInsultos(stringToCheck):
         if any(str(token).endswith(s) for s in insultos):
             sum = sum + 1
     return sum
+
+#Contador unico de insultos
+def contUnicInsultos(stringtoCheck):
+    list_sign = dict([])
+    stringToCheck = unicodedata.normalize("NFKD", stringtoCheck).encode("ascii","ignore").decode("ascii")
+    doc = nlp(stringToCheck)
+    for token in doc:
+        if any(str(token).endswith(s) for s in insultos):
+            if ( list_sign.get(str(token)) ==  None ):
+                list_sign[str(token)] = 1
+            else:
+                list_sign[str(token)] = int(list_sign[str(token)]) + 1
+    return list_sign
 
 #TRACTAMENT TWEET
 def tractarTweet(tweetAAnalitzar):

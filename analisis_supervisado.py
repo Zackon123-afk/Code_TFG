@@ -46,20 +46,20 @@ tweet_atributes_tema_TV.drop(['tema_TV'],axis=1,inplace=True)
 
 # INICIO DEL MODEL DE DECISION TREE
 
-plt.figure(figsize=(14,8))
+plt.figure(figsize=(29,12))
 
-# Model con todo
+# # Model con todo
 
-explicativas = tweet_atributes_general.drop(['violento'],axis=1)
-objetivo = tweet_atributes_general.violento
+# explicativas = tweet_atributes_general.drop(['violento'],axis=1)
+# objetivo = tweet_atributes_general.violento
 
-# Utilizamos el hiperparametro max_depth para acotar el arbol
-model = DecisionTreeClassifier(max_depth=4)
-model.fit(X=explicativas, y=objetivo)
+# # Utilizamos el hiperparametro max_depth para acotar el arbol
+# model = DecisionTreeClassifier(max_depth=4)
+# model.fit(X=explicativas, y=objetivo)
 
-# Visualizamos el modelo
+# # Visualizamos el modelo
 
-plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10);
+# plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10);
 
 
 # # Modelo con el tema del Covid
@@ -118,15 +118,15 @@ plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, 
 # plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10);
 
 
-# # Modelo con el tema del Televisió
+# Modelo con el tema del Televisió
 
-# explicativas = tweet_atributes_tema_TV.drop(['violento'],axis=1)
-# objetivo = tweet_atributes_tema_TV.violento
+explicativas = tweet_atributes_tema_TV.drop(['violento'],axis=1)
+objetivo = tweet_atributes_tema_TV.violento
 
-# # Utilizamos el hiperparametro max_depth para acotar el arbol
-# model = DecisionTreeClassifier(max_depth=4)
-# model.fit(X=explicativas, y=objetivo)
+# Utilizamos el hiperparametro max_depth para acotar el arbol
+model = DecisionTreeClassifier(max_depth=4)
+model.fit(X=explicativas, y=objetivo)
 
-# # Visualizamos el modelo
+# Visualizamos el modelo
 
-# plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10);
+plot_tree(decision_tree=model, feature_names=explicativas.columns, filled=True, fontsize=10);

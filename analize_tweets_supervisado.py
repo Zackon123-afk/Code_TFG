@@ -11,10 +11,10 @@ def tweeterInformation(usernames):
     followers = []
     following = []
 
-    consumer_key= "kxKPh40tJz4dTHIDJxCulXVmH"
-    consumer_secret= "Tb3j4u3jAmqyZI0ueQomwaDZuGXOTgQ2P3r6R0r6pHdEuLHyqm"
-    access_token="1900139084-Kf1x4ozKXOPO65ZzVQC0Gn8U7dQ2m2KywwIS41J"
-    access_token_secret= "OnOsjdLK6OJkuHh4WUWUL0v9lNdIHVgRhfk13F1UrYr16"
+    consumer_key= 
+    consumer_secret=
+    access_token=
+    access_token_secret= 
 
     auth = tweepy.OAuthHandler(consumer_key,consumer_secret)
     auth.set_access_token(access_token,access_token_secret)
